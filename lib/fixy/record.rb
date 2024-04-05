@@ -30,7 +30,7 @@ module Fixy
         valid_range = (range_from + (size - 1) == range_to)
 
         raise ArgumentError, "Invalid Range (size: #{size}, range: #{range})" unless valid_range
-        raise ArgumentError, "Invalid Range (> #{record_length})"             unless range_to <= record_length
+        raise ArgumentError, "Invalid Range (> #{record_length})"             unless record_length.nil? or range_to <= record_length
 
         # Ensure range is not already covered by another definition
         (1..range_to).each do |column|
@@ -81,9 +81,9 @@ module Fixy
       def parse(record, debug = false)
         raise ArgumentError, 'Record must be a string'  unless record.is_a? String
 
-        unless record.bytesize == record_length
-          raise ArgumentError, "Record length is invalid (Expected #{record_length})"
-        end
+        # unless record_length.nil? or record.bytesize == record_length
+        #   raise ArgumentError, "Record length is invalid (Expected #{record_length})"
+        # end
 
         decorator = debug ? Fixy::Decorator::Debug : Fixy::Decorator::Default
         fields = []
